@@ -37,7 +37,16 @@
 └── tests/test_smoke.py
 ```
 
-## 快速开始
+## 一键启动（推荐）
+
+- **Windows**：双击 `start.bat`
+- **macOS / Linux**：终端执行 `./start.sh`
+
+脚本会自动完成：检测 Python → 创建虚拟环境 → 安装依赖 → 检查/构建前端 → 启动服务 → 打开浏览器。
+
+> 如果下载的是**带 `dist` 的 Release 包**，连 Node.js 都不需要装，只要电脑里有 Python 3.8+ 即可。
+
+## 手动启动
 
 ```bash
 # 1. 安装后端依赖（建议使用虚拟环境）
