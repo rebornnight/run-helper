@@ -1,4 +1,4 @@
-"""乐跑模拟器 API。
+﻿"""跑步助手 API。
 
 ⚠️ 本项目仅供学习与研究，请勿用于违反校规或作弊。使用风险自负。
 
@@ -422,6 +422,6 @@ def _bootstrap():
 
 if __name__ == '__main__':
     _bootstrap()
-    print(f'乐跑模拟器 API 已启动: http://{HOST}:{PORT}')
+    print(f'跑步助手 API 已启动: http://{HOST}:{PORT}')
     print('⚠️  仅供学习研究，请勿用于违反校规或作弊。')
     app.run(host=HOST, port=PORT, debug=False)
