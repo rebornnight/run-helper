@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 p-0 font-sans antialiased;
+    background: #f5f5f7;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ── 滚动条 — 大厂标准（始终可见、细腻过渡） ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.13);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.25s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.35);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.13) transparent;
+}
+
+/* ── 隐藏浏览器自带的密码显示按钮（避免与自定义 EyeIcon 冲突） ── */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+/* Chrome 内置密码眼睛 — 无标准伪元素，但 padding-right 可以推开它 */
+input[type="password"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+}
+
+/* ── Card with micro-gradient (Apple top-light effect) ── */
+@layer components {
+  .card-apple {
+    background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 4px), white;
+  }
+  .card-apple-solid {
+    background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 6px), white;
+  }
+
+  /* Gradient divider */
+  .divider-gradient {
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent) 1;
+  }
+}
+
+/* ── Glass backdrop ── */
+@layer utilities {
+  .backdrop-glass {
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  }
+  .backdrop-glass-heavy {
+    backdrop-filter: blur(32px) saturate(1.6);
+    -webkit-backdrop-filter: blur(32px) saturate(1.6);
+  }
+}

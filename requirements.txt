@@ -1,0 +1,5 @@
+flask>=3.0,<4
+requests>=2.31,<3
+cryptography>=36,<46
+curl-cffi>=0.7,<1
+oss2>=2.19,<3

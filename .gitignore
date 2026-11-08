@@ -1,0 +1,25 @@
+# 运行产物
+data.db
+data.db-shm
+data.db-wal
+*.log
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# 前端
+user-portal/node_modules/
+user-portal/dist/
+
+# 本地记录（含个人数据，不要提交）
+records_params_cache.json
+all_records.json
+last_result.json
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
