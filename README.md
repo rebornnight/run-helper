@@ -1,6 +1,6 @@
-# 跑步助手
+﻿# 跑步助手
 
-> GitHub 仓库：<https://github.com/rebornnight/run_server_opensource>
+> GitHub 仓库：<https://github.com/rebornnight/run-helper>
 >
 > ⚠️ **本项目仅供学习与研究，请勿用于违反校规、作弊或任何违法用途。使用风险自负。**
 >
@@ -94,7 +94,7 @@ npm --version
 方式一：Git 克隆
 
 ```powershell
-git clone https://github.com/rebornnight/run_server_opensource.git
+git clone https://github.com/rebornnight/run-helper.git
 ```
 
 方式二：下载 Release 包 → 解压到任意目录（例如 `D:\跑步助手`）
@@ -233,13 +233,13 @@ node --version
 克隆项目：
 
 ```bash
-git clone https://github.com/rebornnight/run_server_opensource.git
+git clone https://github.com/rebornnight/run-helper.git
 ```
 
 进入目录：
 
 ```bash
-cd run_server_opensource
+cd run-helper
 ```
 
 给启动脚本加执行权限：
@@ -461,10 +461,10 @@ After=network.target
 [Service]
 Type=simple
 User=youruser
-WorkingDirectory=/opt/run_server_opensource
+WorkingDirectory=/opt/run-helper
 Environment="HOST=127.0.0.1"
 Environment="PORT=5000"
-ExecStart=/opt/run_server_opensource/.venv/bin/gunicorn -w 1 -b 127.0.0.1:5000 wsgi:app
+ExecStart=/opt/run-helper/.venv/bin/gunicorn -w 1 -b 127.0.0.1:5000 wsgi:app
 Restart=always
 RestartSec=3
 
