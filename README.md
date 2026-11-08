@@ -1,5 +1,7 @@
 # 跑步助手
 
+> GitHub 仓库：<https://github.com/rebornnight/run_server_opensource>
+>
 > ⚠️ **本项目仅供学习与研究，请勿用于违反校规、作弊或任何违法用途。使用风险自负。**
 >
 > 请自行准备乐跑账号并在**本地**运行，作者不对任何使用后果负责。**禁止商用**。
@@ -92,7 +94,7 @@ npm --version
 方式一：Git 克隆
 
 ```powershell
-git clone <你的仓库地址>
+git clone https://github.com/rebornnight/run_server_opensource.git
 ```
 
 方式二：下载 Release 包 → 解压到任意目录（例如 `D:\跑步助手`）
@@ -231,7 +233,7 @@ node --version
 克隆项目：
 
 ```bash
-git clone <你的仓库地址>
+git clone https://github.com/rebornnight/run_server_opensource.git
 ```
 
 进入目录：
