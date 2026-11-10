@@ -375,7 +375,7 @@ def submit_run(config, route_name='first_field', pre_record=None):
     # 4. 提交
     dev_id, dev_model, dev_os = get_device_info(config)
     rd = {
-        'term_id': str(config.get('term_id', '12734')),
+        'term_id': str(config.get('term_id') or '0'),
         'game_id': game_id,
         'start_time': start_t,
         'end_time': dt_now,
@@ -602,7 +602,7 @@ def submit_using_record(config, record_id, route_name='first_field'):
     # 7. 提交
     dev_id, dev_model, dev_os = get_device_info(config)
     rd = {
-        'term_id': str(config.get('term_id', '12734')),
+        'term_id': str(config.get('term_id') or '0'),
         'game_id': game_id,
         'start_time': start_t,
         'end_time': dt_now,

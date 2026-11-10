@@ -11,7 +11,7 @@
   3. 直接提交（无倒计时）
        POST /api/submit              {"route": "first_field"}
   4. 复用历史记录
-       POST /api/capture/records     {"term_id": "12734"}
+       POST /api/capture/records     {"term_id": "<学期ID>"}
        POST /api/submit/with-record  {"record_id": "...", "route": "first_field"}
 """
 import json
