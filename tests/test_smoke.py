@@ -9,7 +9,7 @@ import tempfile
 os.environ.setdefault('DB_PATH', os.path.join(tempfile.gettempdir(), 'lepao_opensource_test.db'))
 
 import storage  # noqa: E402
-from app import app  # noqa: E402
+from app import app, _pick_capture_candidate  # noqa: E402
 
 
 def setup_module(module):
@@ -60,3 +60,41 @@ def test_run_session_endpoints_removed():
     assert app.test_client().get('/api/user/run/status').status_code == 404
     assert app.test_client().post('/api/user/run/cancel').status_code == 405
     assert app.test_client().post('/api/user/run/start', json={}).status_code == 405
+
+
+# ── 抓包配置挑选逻辑 ───────────────────────────────────────────────
+
+def _cand(ts, term_id, uid='u1'):
+    return {'uid': uid, 'token': 't', 'school_id': '837', 'term_id': str(term_id),
+            'student_num': 's1', 'class_id': 0, 'card_id': 'c1', '_timestamp': ts}
+
+
+def test_pick_candidate_empty():
+    assert _pick_capture_candidate([]) is None
+
+
+def test_pick_candidate_prefers_latest_timestamp():
+    picked = _pick_capture_candidate([_cand(100, '13103'), _cand(200, '13103')])
+    assert picked['_timestamp'] == 200
+
+
+def test_pick_candidate_fills_zero_term_id():
+    # 最新的报文 term_id=0（getTermList / getOssSts 之类），应从同批抓包补真实学期
+    picked = _pick_capture_candidate([
+        _cand(100, '13103'),
+        _cand(50, '12734'),
+        _cand(200, '0'),
+    ])
+    assert picked['_timestamp'] == 200       # 仍然用最新那条的身份信息
+    assert picked['term_id'] == '13103'      # 但 term_id 取时间最接近的非 0 值
+
+
+def test_pick_candidate_all_zero_keeps_zero():
+    picked = _pick_capture_candidate([_cand(100, '0'), _cand(200, '0')])
+    assert picked['term_id'] == '0'
+
+
+def test_pick_candidate_real_term_id_not_overridden():
+    picked = _pick_capture_candidate([_cand(100, '13103'), _cand(200, '13103')])
+    assert picked['term_id'] == '13103'
+

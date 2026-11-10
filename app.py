@@ -214,6 +214,30 @@ def handle_capture_delete_config():
     return jsonify({'status': 'ok', 'message': '已清除'})
 
 
+def _pick_capture_candidate(candidates):
+    """从一批解析结果里挑出要保存的配置。
+
+    规则：
+      1. 取 timestamp 最新的，避免旧 token 覆盖新 token；
+      2. 但有些接口（WpRun/getTermList、WpLogin/getSchoolInfo、WpIndex/index、
+         WpIndex/getOssSts、WpExam/newNotice 等）报文里的 term_id 固定为 0，
+         如果挑中的正好是这类，就从同一批抓包里补一个真实 term_id（时间最接近的优先）。
+    """
+    if not candidates:
+        return None
+    ordered = sorted(candidates, key=lambda c: int(c.get('_timestamp', 0)), reverse=True)
+    picked = dict(ordered[0])
+    if str(picked.get('term_id') or '0') in ('0', ''):
+        base_ts = int(picked.get('_timestamp', 0))
+        real = [(int(c.get('_timestamp', 0)), str(c.get('term_id')))
+                for c in ordered
+                if str(c.get('term_id') or '0') not in ('0', '')]
+        if real:
+            real.sort(key=lambda x: abs(x[0] - base_ts))
+            picked['term_id'] = real[0][1]
+    return picked
+
+
 @app.route('/api/capture/import', methods=['POST'])
 def handle_capture_import():
     """解析抓包数据，返回提取结果（不保存）。"""
@@ -230,21 +254,7 @@ def handle_capture_import():
         cand = _try_extract(dp)
         if cand:
             candidates.append(cand)
-    if candidates:
-        # 取 timestamp 最新的，避免旧 token 覆盖新 token
-        candidates.sort(key=lambda c: int(c.get('_timestamp', 0)), reverse=True)
-        extracted = candidates[0]
-        # 有些接口（getTermList / getSchoolInfo / WpIndex/index 等）报文里 term_id 固定为 0，
-        # 若挑中的恰好是这类报文，就从同一批抓包里补一个真实 term_id
-        if str(extracted.get('term_id') or '0') in ('0', ''):
-            base_ts = int(extracted.get('_timestamp', 0))
-            real_tids = [(int(c.get('_timestamp', 0)), str(c.get('term_id')))
-                         for c in candidates
-                         if str(c.get('term_id') or '0') not in ('0', '')]
-            if real_tids:
-                # 优先取时间最接近的（同一次抓包会话）
-                real_tids.sort(key=lambda x: abs(x[0] - base_ts))
-                extracted['term_id'] = real_tids[0][1]
+    extracted = _pick_capture_candidate(candidates)
 
     if not extracted:
         from urllib.parse import parse_qs
