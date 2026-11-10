@@ -1,4 +1,4 @@
-﻿"""跑步助手 API。
+"""跑步助手 API。
 
 ⚠️ 本项目仅供学习与研究，请勿用于违反校规或作弊。使用风险自负。
 
@@ -234,6 +234,17 @@ def handle_capture_import():
         # 取 timestamp 最新的，避免旧 token 覆盖新 token
         candidates.sort(key=lambda c: int(c.get('_timestamp', 0)), reverse=True)
         extracted = candidates[0]
+        # 有些接口（getTermList / getSchoolInfo / WpIndex/index 等）报文里 term_id 固定为 0，
+        # 若挑中的恰好是这类报文，就从同一批抓包里补一个真实 term_id
+        if str(extracted.get('term_id') or '0') in ('0', ''):
+            base_ts = int(extracted.get('_timestamp', 0))
+            real_tids = [(int(c.get('_timestamp', 0)), str(c.get('term_id')))
+                         for c in candidates
+                         if str(c.get('term_id') or '0') not in ('0', '')]
+            if real_tids:
+                # 优先取时间最接近的（同一次抓包会话）
+                real_tids.sort(key=lambda x: abs(x[0] - base_ts))
+                extracted['term_id'] = real_tids[0][1]
 
     if not extracted:
         from urllib.parse import parse_qs
